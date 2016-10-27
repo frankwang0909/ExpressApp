@@ -133,16 +133,16 @@ $ npm start
 
 
 ### 模板引擎
-1. 作用：
+1.作用：
 在 MVC 架构中，模板引擎包含在服务器端。控制器得到用户请求后，从模型获取数据，调用模板引擎。模板引擎以数据和页面模板为输入，生成 HTML 页面，然后返回给控制器，由控制器交回客户端。
 
-2. ejs 的标签系统非常简单，它只有以下三种标签：
+2.ejs 的标签系统非常简单，它只有以下三种标签：
 	
 	<% code %>：JavaScript 代码。
 	<%= code %>：显示替换过 HTML 特殊字符的内容。
 	<%- code %>：显示原始 HTML 内容。
 
-3. 示例：
+3.示例：
 数据：
 	students: ['Alex', 'Bob', 'Callie']
 
@@ -162,7 +162,7 @@ $ npm start
 	  <li>Callie</li>
 	</ul>
 
-4. 页面布局：include引用其他模板文件
+4.页面布局：include引用其他模板文件
 假设我们有header.ejs和footer.ejs, index.ejs引入这两个文件
 	
 	<%- include header %>
