@@ -137,6 +137,7 @@ $ npm start
 在 MVC 架构中，模板引擎包含在服务器端。控制器得到用户请求后，从模型获取数据，调用模板引擎。模板引擎以数据和页面模板为输入，生成 HTML 页面，然后返回给控制器，由控制器交回客户端。
 
 2. ejs 的标签系统非常简单，它只有以下三种标签：
+	
 	<% code %>：JavaScript 代码。
 	<%= code %>：显示替换过 HTML 特殊字符的内容。
 	<%- code %>：显示原始 HTML 内容。
@@ -146,6 +147,7 @@ $ npm start
 	students: ['Alex', 'Bob', 'Callie']
 
 模板：
+	
 	<ul>
 	<% for(var i=0; i<students.length; i++) {%>
 	   <li><%= students[i] %></li>
@@ -153,6 +155,7 @@ $ npm start
 	</ul>
 
 渲染结果：
+	
 	<ul>
 	  <li>Alex</li>
 	  <li>Bob</li>
@@ -161,6 +164,7 @@ $ npm start
 
 4. 页面布局：include引用其他模板文件
 假设我们有header.ejs和footer.ejs, index.ejs引入这两个文件
+	
 	<%- include header %>
 	<div class="main">
 		这里是中间区域
