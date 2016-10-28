@@ -7,6 +7,12 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 // var users = require('./routes/users');
+var settings = require('./settings');
+
+// 会话用来识别用户
+var session = require('express-session');
+// 将会话信息存储值数据库中
+var MongoStore = require('connect-mongo')(session);
 
 var app = express();
 
@@ -22,6 +28,19 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(session({
+  secret: settings.cookieSecret, //secret 用来防止篡改 cookie
+  key: settings.db, //key 的值为 cookie 的名字
+  cookie: {  //maxAge 值设定 cookie 的生存期
+    maxAge: 1000*60*60*24*30 //30 days对应的毫秒数
+  },
+  store: new MongoStore({ //设置它的 store 参数为 MongoStore 实例，把会话信息存储到数据库中，以避免丢失
+    // db: settings.db,
+    // host:settings.host,
+    // port:settings.port,
+    url: 'mongodb://localhost/blog'
+  })
+}));
 // app.use('/', routes);
 // app.use('/users', users);
 routes(app);

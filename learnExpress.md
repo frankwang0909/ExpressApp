@@ -170,3 +170,86 @@ $ npm start
 		这里是中间区域
 	</div>
 	<%- include footer %>
+
+### 路由规划
+博客网站有如下功能：注册、登录、发表、退出，相应地有注册页、登录页、发表页。
+根据设计，规划如下路由：
+	/ ：首页
+	/login ：用户登录
+	/reg ：用户注册
+	/post ：发表文章
+	/logout ：登出
+
+ /login 和  /reg 只能是未登录的用户访问，而  /post 和  /logout 只能是已登录的用户访问。左侧导航列表则针对已登录和未登录的用户显示不同的内容。
+
+修改routes目录下的index.js：
+	module.exports = function(app) {
+	  app.get('/', function (req, res) {
+	    res.render('index', { title: '主页' });
+	  });
+	  app.get('/reg', function (req, res) {
+	    res.render('reg', { title: '注册' });
+	  });
+	  app.post('/reg', function (req, res) {
+	  });
+	  app.get('/login', function (req, res) {
+	    res.render('login', { title: '登录' });
+	  });
+	  app.post('/login', function (req, res) {
+	  });
+	  app.get('/post', function (req, res) {
+	    res.render('post', { title: '发表' });
+	  });
+	  app.post('/post', function (req, res) {
+	  });
+	  app.get('/logout', function (req, res) {
+	  });
+	};
+
+### 数据库 MongoDB
+如何判断用户是否已经登陆了，需要用到会话（session）机制来记录用户登录状态。这时候我们还需要访问数据库来保存和读取用户信息。
+
+#### MongoDB的基本知识：
+1. 基于分布式文件存储的 NoSQL（非关系型数据库）的一种，由 C++ 语言编写，旨在为 WEB 应用提供可扩展的高性能数据存储解决方案。
+2. MongoDB 支持的数据结构非常松散，是类似 json 的 bjson 格式，因此可以存储比较复杂的数据类型。
+3. 文档是 MongoDB 最基本的单位，每个文档都会以唯一的 _id 标识，文档的属性为 key/value 的键值对形式，文档内可以嵌套另一个文档，因此可以存储比较复杂的数据类型。
+4. 集合是许多文档的总和，一个数据库可以有多个集合，一个集合可以有多个文档。
+
+#### 安装及配置
+1. 下载：
+	[官网下载]（https://www.mongodb.com/download-center#community）
+
+2. 安装：
+	默认路径是：C:\Program Files\MongoDB\Server\3.2\;
+	可以改成 D:\Program Files\MongoDB\Server\3.2\。
+
+3. 配置：
+	先在安装目录下新建目录blog，用于存放项目的数据；
+	设置数据路径：命令行切换到D:\Program Files\MongoDB\Server\3.2\bin\
+	再输入 mongod.exe --dbpath D:\Program Files\MongoDB\Server\3.2\blog
+
+
+#### 启动
+命令行输入："D:\Program Files\MongoDB\Server\3.2\bin\mongod.exe"
+
+
+#### 连接MongoDB
+Node.js中需要mongodb驱动模块来使用MongoDB
+命令行切换到项目根目录下F:\LEARN\Express\ExpressApp\blog
+	$ npm install mongodb
+
+
+示例代码：
+	var MongoClient = require('mongodb').MongoClient;
+
+	MongoClient.connect('mongodb://localhost:27017/animals', function(err, db) {
+	  if (err) {
+	    throw err;
+	  }
+	  db.collection('mammals').find().toArray(function(err, result) {
+	    if (err) {
+	      throw err;
+	    }
+	    console.log(result);
+	  });
+	});
