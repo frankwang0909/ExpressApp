@@ -1,7 +1,8 @@
 <%- include header %>
 <form method="post">
-	<label for="name">用户名：</label><input type="text" id="name" /> <br/>
-	<label for="password">密码：</label><input type="password" id="password" /><br/>
-	<button>登录</button>
+	<!-- 注意这里input输入域需要有属性name -->
+	<label for="name">用户名：</label><input type="text" name="name" /> <br/>
+	<label for="password">密码：</label><input type="password" name="password" /><br/>
+<button type="submit">登录</button>
 </form>
 <%- include footer %>

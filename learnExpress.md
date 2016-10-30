@@ -2,9 +2,9 @@
 
 ## 搭建环境
 ### 开发环境
-1.Node.js: 4.5.0;
-2.Express: 4.13.4;
-3.MongoDB: 3.2.10;
+	1.Node.js: 4.5.0;
+	2.Express: 4.13.4;
+	3.MongoDB: 3.2.10;
 
 ### 安装 express 命令行工具
 $ npm install -g express-generator
@@ -183,6 +183,7 @@ $ npm start
  /login 和  /reg 只能是未登录的用户访问，而  /post 和  /logout 只能是已登录的用户访问。左侧导航列表则针对已登录和未登录的用户显示不同的内容。
 
 修改routes目录下的index.js：
+
 	module.exports = function(app) {
 	  app.get('/', function (req, res) {
 	    res.render('index', { title: '主页' });
@@ -226,7 +227,9 @@ $ npm start
 3. 配置：
 	先在安装目录下新建目录blog，用于存放项目的数据；
 	设置数据路径：命令行切换到D:\Program Files\MongoDB\Server\3.2\bin\
-	再输入 mongod.exe --dbpath D:\Program Files\MongoDB\Server\3.2\blog
+	再输入 mongod.exe --dbpath "D:\Program Files\MongoDB\Server\3.2\blog"
+
+	命令行出现一大串字符,最后有一行显示“waiting for connections on port 27017” 说明MongoDB连接成功了，在浏览器打开"localhost:27017",会显示一行“It looks like you are trying to access MongoDB over HTTP on the native driver port.”
 
 
 #### 启动
@@ -253,3 +256,40 @@ Node.js中需要mongodb驱动模块来使用MongoDB
 	    console.log(result);
 	  });
 	});
+
+### 查看数据库内容
+命令行切换到MongoDB安装目录的bin目录，如D:\Program Files\MongoDB\Server\3.2\bin
+输入： mongo
+<!-- 进入到命名为blog的数据库下 -->
+再输入： use blog  
+<!-- 找到所有的user信息 -->
+输入： db.users.find()
+
+### 页面通知
+1. 什么是flash: 
+flash 是一个在 session 中用于存储信息的特定区域。信息写入 flash ，下一次显示完毕后即被清除。典型的应用是结合重定向的功能，确保信息是提供给下一个被渲染的页面。
+2. 安装connect-flash 模块：npm install connect-flash --save
+3. 修改 app.js 在  var settings = require('./settings'); 后添加：
+	var flash = require('connect-flash');
+在 app.set('view engine', 'ejs'); 后添加：
+	app.use(flash());
+现在我们就可以使用 flash 功能了。
+
+### 页面权限控制
+注册和登陆页面应该阻止已登陆的用户访问，登出及后面我们将要实现的发表页只对已登录的用户开放。把用户登录状态的检查放到路由中间件中，在每个路径前增加路由中间件，即可实现页面权限控制。添加 checkNotLogin 和  checkLogin 函数来实现这个功能。
+
+	function checkLogin(req, res, next) {
+	  if (!req.session.user) {
+	    req.flash('error', '未登录!'); 
+	    res.redirect('/login');
+	  }
+	  next();
+	}
+
+	function checkNotLogin(req, res, next) {
+	  if (req.session.user) {
+	    req.flash('error', '已登录!'); 
+	    res.redirect('back');//返回之前的页面
+	  }
+	  next();
+	}

@@ -9,6 +9,8 @@ var routes = require('./routes/index');
 // var users = require('./routes/users');
 var settings = require('./settings');
 
+var flash = require('connect-flash');
+
 // 会话用来识别用户
 var session = require('express-session');
 // 将会话信息存储值数据库中
@@ -19,6 +21,8 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+app.use(flash());
 
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
