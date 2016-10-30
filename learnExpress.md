@@ -233,7 +233,10 @@ $ npm start
 
 
 #### 启动
-命令行输入："D:\Program Files\MongoDB\Server\3.2\bin\mongod.exe"
+每次运行项目（npm start)之前需要启动数据库, 否则会报错显示：
+`MongoError: failed to connect to server [localhost:27017] on first connect.`
+命令行切换到`D:\Program Files\MongoDB\Server\3.2\bin\`
+再输入`mongod.exe --dbpath "D:\Program Files\MongoDB\Server\3.2\blog" `即可启动数据库。
 
 
 #### 连接MongoDB
